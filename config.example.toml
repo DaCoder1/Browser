@@ -1,0 +1,31 @@
+# Kestrel config — copy to ~/.config/kestrel/config.toml. Every key is optional.
+# Restart Kestrel after editing. Colors come from your Omarchy theme automatically.
+
+[general]
+homepage = "kestrel://start"
+search_engine = "ddg"          # key from [search_engines] used for plain searches
+restore_session = true         # reopen your tabs on start
+show_tabs = "multiple"         # always | multiple | never
+hint_chars = "asdfghjkl"       # letters used for link hints
+scroll_step = 60               # pixels per j/k
+default_zoom = 1.0
+force_dark = false             # force dark mode on every site
+smooth_scrolling = true
+font = "JetBrainsMono Nerd Font"
+font_size = 11
+downloads_dir = "~/Downloads"
+
+# Type "<key> <query>" in the open bar (o), e.g. "yt lofi", "aw pacman".
+[search_engines]
+# ddg = "https://duckduckgo.com/?q={}"
+# g   = "https://www.google.com/search?q={}"
+mdn = "https://developer.mozilla.org/en-US/search?q={}"
+pkg = "https://archlinux.org/packages/?q={}"
+
+# Remap keys. Value is any command you can type after ":". Use "nop" to unbind.
+# Notation: "j", "G", "gg", "<C-d>", "<A-1>", "<Esc>", "<Space>", "<S-Tab>".
+[bindings]
+# "<C-t>" = "set-cmd open -t "
+# "<C-w>" = "tab-close"
+# "D" = "tab-close"
+# "x" = "nop"

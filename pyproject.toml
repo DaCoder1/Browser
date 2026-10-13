@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kestrel-browser"
+version = "0.1.0"
+description = "A keyboard-driven web browser for Omarchy"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+dependencies = ["PyQt6", "PyQt6-WebEngine"]
+
+[project.scripts]
+kestrel = "kestrel.app:main"
+
+[tool.setuptools]
+packages = ["kestrel"]
+
+[tool.setuptools.package-data]
+kestrel = ["js/*.js"]

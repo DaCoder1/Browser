@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Application
+Name=Kestrel
+GenericName=Web Browser
+Comment=Keyboard-driven web browser for Omarchy
+Exec=kestrel %U
+Icon=kestrel
+Terminal=false
+StartupWMClass=kestrel
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;
+Keywords=web;browser;internet;vim;
+Actions=new-private-window;
+
+[Desktop Action new-private-window]
+Name=New Private Window
+Exec=kestrel --private
