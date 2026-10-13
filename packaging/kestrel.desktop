@@ -2,7 +2,7 @@
 Type=Application
 Name=Kestrel
 GenericName=Web Browser
-Comment=Keyboard-driven web browser for Omarchy
+Comment=Keyboard-friendly web browser for Omarchy
 Exec=kestrel %U
 Icon=kestrel
 Terminal=false

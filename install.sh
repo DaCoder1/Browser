@@ -52,4 +52,4 @@ if [[ "${1:-}" == "--default" ]]; then
   echo ":: Kestrel is now the default browser (Super+Shift+B in Omarchy opens it)"
 fi
 
-echo "Kestrel installed. Run 'kestrel' or launch it from the Omarchy menu (Super+Space)."
+echo "Kestrel installed. Run 'kestrel' or launch it from the Omarchy menu (Super+Space). Press F1 inside for shortcuts."

@@ -95,12 +95,24 @@ class Storage:
         return rows.fetchall()
 
     # -- session ------------------------------------------------------------
-    def save_session(self, urls: list[str], current: int) -> None:
-        self.session_file.write_text(json.dumps({"tabs": urls, "current": current}, indent=1))
+    def save_session(self, windows: list[dict]) -> None:
+        """windows: [{"tabs": [url, ...], "current": index}, ...]"""
+        self.session_file.write_text(json.dumps({"windows": windows}, indent=1))
 
-    def load_session(self) -> tuple[list[str], int]:
+    def load_session(self) -> list[dict]:
         try:
             data = json.loads(self.session_file.read_text())
-            return [u for u in data.get("tabs", []) if isinstance(u, str)], int(data.get("current", 0))
         except (OSError, ValueError):
-            return [], 0
+            return []
+        wins = data.get("windows", [data]) if isinstance(data, dict) else []  # old: one window
+        out = []
+        for w in wins:
+            if not isinstance(w, dict):
+                continue
+            tabs = [u for u in w.get("tabs", []) if isinstance(u, str)]
+            try:
+                current = int(w.get("current", 0))
+            except (TypeError, ValueError):
+                current = 0
+            out.append({"tabs": tabs, "current": current})
+        return out

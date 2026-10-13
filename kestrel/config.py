@@ -22,15 +22,81 @@ DEFAULT_SEARCH_ENGINES = {
     "w": "https://en.wikipedia.org/wiki/Special:Search?search={}",
 }
 
-# key sequence -> command. Commands are the same ones you can type after ':'.
-DEFAULT_BINDINGS: dict[str, str] = {
-    # scrolling
+# Standard browser shortcuts. Typing goes to the page; only these chords are
+# intercepted. Values are commands (see commands.py / the Ctrl+K palette).
+STANDARD_BINDINGS: dict[str, str] = {
+    # tabs & windows
+    "<C-t>": "tab-new",
+    "<C-w>": "tab-close",
+    "<C-F4>": "tab-close",
+    "<C-S-t>": "tab-undo",
+    "<C-Tab>": "tab-next",
+    "<C-PgDown>": "tab-next",
+    "<C-S-Tab>": "tab-prev",
+    "<C-PgUp>": "tab-prev",
+    "<C-S-PgUp>": "tab-move -1",
+    "<C-S-PgDown>": "tab-move +1",
+    **{f"<C-{n}>": f"tab-focus {n}" for n in range(1, 9)},
+    "<C-9>": "tab-focus -1",
+    **{f"<A-{n}>": f"tab-focus {n}" for n in range(1, 10)},
+    "<C-S-a>": "tab-search",
+    "<C-n>": "window-new",
+    "<C-S-n>": "private",
+    "<C-S-w>": "window-close",
+    "<C-q>": "quit",
+    # navigation
+    "<A-Left>": "back",
+    "<A-Right>": "forward",
+    "<C-[>": "back",
+    "<C-]>": "forward",
+    "<C-r>": "reload",
+    "<F5>": "reload",
+    "<C-S-r>": "reload -f",
+    "<S-F5>": "reload -f",
+    "<C-F5>": "reload -f",
+    "<A-Home>": "home",
+    # address bar
+    "<C-l>": "focus-url",
+    "<A-d>": "focus-url",
+    "<F6>": "focus-url",
+    "<C-k>": "palette",
+    "<C-S-p>": "palette",
+    "<C-S-o>": "bookmarks",
+    "<C-h>": "history",
+    # page
+    "<C-f>": "find",
+    "<F3>": "find-next",
+    "<C-g>": "find-next",
+    "<S-F3>": "find-prev",
+    "<C-S-g>": "find-prev",
+    "<C-d>": "bookmark",
+    "<A-f>": "hint",
+    "<A-S-f>": "hint -t",
+    "<A-y>": "hint -y",
+    "<A-i>": "focus-input",
+    "<A-c>": "yank url",
+    # view
+    "<C-=>": "zoom in",
+    "<C-+>": "zoom in",
+    "<C-S-+>": "zoom in",
+    "<C-->": "zoom out",
+    "<C-0>": "zoom reset",
+    "<F11>": "fullscreen",
+    # tools
+    "<C-u>": "view-source",
+    "<F12>": "devtools",
+    "<C-S-i>": "devtools",
+    "<C-S-y>": "downloads",
+    "<F1>": "help",
+    "<C-/>": "help",
+}
+
+# Optional modal Vim keys (keymap = "vim"), layered on top of the standard ones.
+VIM_BINDINGS: dict[str, str] = {
     "j": "scroll down",
     "k": "scroll up",
     "h": "scroll left",
     "l": "scroll right",
-    "<Down>": "scroll down",
-    "<Up>": "scroll up",
     "d": "scroll-page 0.5",
     "u": "scroll-page -0.5",
     "<C-d>": "scroll-page 0.5",
@@ -39,11 +105,8 @@ DEFAULT_BINDINGS: dict[str, str] = {
     "<S-Space>": "scroll-page -0.9",
     "<C-f>": "scroll-page 0.9",
     "<C-b>": "scroll-page -0.9",
-    "<PgDown>": "scroll-page 0.9",
-    "<PgUp>": "scroll-page -0.9",
     "gg": "scroll-to top",
     "G": "scroll-to bottom",
-    # navigation
     "H": "back",
     "L": "forward",
     "r": "reload",
@@ -52,72 +115,62 @@ DEFAULT_BINDINGS: dict[str, str] = {
     "gu": "navigate up",
     "gU": "navigate root",
     "gs": "view-source",
-    # opening
-    "o": "set-cmd open ",
-    "O": "set-cmd open -t ",
-    "go": "set-cmd open {url}",
-    "gO": "set-cmd open -t {url}",
-    "t": "set-cmd open -t ",
+    "o": "open",
+    "O": "tab-new",
+    "t": "tab-new",
+    "go": "focus-url {url}",
+    "gO": "tab-new {url}",
     "p": "paste",
     "P": "paste -t",
     "gh": "home",
-    # tabs
     "J": "tab-next",
     "K": "tab-prev",
     "gt": "tab-next",
     "gT": "tab-prev",
-    "<C-Tab>": "tab-next",
-    "<C-S-Tab>": "tab-prev",
     "g0": "tab-focus 1",
     "g$": "tab-focus -1",
     "x": "tab-close",
     "X": "tab-undo",
-    "<A-,>": "tab-move -1",
-    "<A-.>": "tab-move +1",
     "yd": "tab-clone",
-    "b": "set-cmd buffer ",
-    **{f"<A-{n}>": f"tab-focus {n}" for n in range(1, 10)},
-    # hints
+    "b": "tab-search",
     "f": "hint",
     "F": "hint -t",
     "yf": "hint -y",
     "gi": "focus-input",
-    # clipboard
     "yy": "yank url",
     "yt": "yank title",
-    # find
-    "/": "set-cmd /",
-    "n": "search-next",
-    "N": "search-prev",
-    # modes
+    "/": "find",
+    "n": "find-next",
+    "N": "find-prev",
     "i": "mode insert",
     "<C-v>": "mode passthrough",
-    ":": "set-cmd ",
-    # zoom
+    ":": "palette",
     "zi": "zoom in",
     "zo": "zoom out",
     "zz": "zoom reset",
-    "+": "zoom in",
-    "-": "zoom out",
-    "=": "zoom reset",
-    # misc
     "B": "bookmark",
     "?": "help",
-    "<F1>": "help",
-    "<F12>": "devtools",
     "ZZ": "quit",
     "ZQ": "quit --no-save",
 }
 
 
+def default_bindings(keymap: str) -> dict[str, str]:
+    bindings = dict(STANDARD_BINDINGS)
+    if keymap == "vim":
+        bindings.update(VIM_BINDINGS)
+    return bindings
+
+
 @dataclass
 class Config:
+    keymap: str = "standard"  # standard | vim
     homepage: str = "kestrel://start"
     search_engine: str = "ddg"
     search_engines: dict[str, str] = field(default_factory=lambda: dict(DEFAULT_SEARCH_ENGINES))
     downloads_dir: Path = field(default_factory=lambda: Path("~/Downloads").expanduser())
     restore_session: bool = True
-    show_tabs: str = "multiple"  # always | multiple | never
+    show_tabs: str = "always"  # always | multiple | never
     hint_chars: str = "asdfghjkl"
     scroll_step: int = 60
     default_zoom: float = 1.0
@@ -125,7 +178,7 @@ class Config:
     smooth_scrolling: bool = True
     font: str = "JetBrainsMono Nerd Font"
     font_size: int = 11
-    bindings: dict[str, str] = field(default_factory=lambda: dict(DEFAULT_BINDINGS))
+    bindings: dict[str, str] = field(default_factory=lambda: default_bindings("standard"))
 
     @classmethod
     def load(cls, path: Path = CONFIG_FILE) -> "Config":
@@ -139,13 +192,14 @@ class Config:
             return cfg
         general = data.get("general", data)
         for key in (
-            "homepage", "search_engine", "restore_session", "show_tabs", "hint_chars",
+            "keymap", "homepage", "search_engine", "restore_session", "show_tabs", "hint_chars",
             "scroll_step", "default_zoom", "force_dark", "smooth_scrolling", "font", "font_size",
         ):
             if key in general:
                 setattr(cfg, key, type(getattr(cfg, key))(general[key]))
         if "downloads_dir" in general:
             cfg.downloads_dir = Path(general["downloads_dir"]).expanduser()
+        cfg.bindings = default_bindings(cfg.keymap)
         cfg.search_engines.update(data.get("search_engines", {}))
         for key, cmd in data.get("bindings", {}).items():
             if cmd in ("", None, "nop"):

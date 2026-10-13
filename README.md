@@ -1,27 +1,36 @@
 # Kestrel
 
-A keyboard-driven web browser for [Omarchy](https://omarchy.org). It uses Vim-style keys, follows your Omarchy theme, and runs on Chromium (Qt WebEngine), so sites work as they do in Chrome.
+A web browser for [Omarchy](https://omarchy.org) that works like a normal browser, with a keyboard shortcut for nearly everything. It has tabs, an address bar, back/forward buttons and a menu, follows your Omarchy theme, and runs on Chromium (Qt WebEngine), so sites work as they do in Chrome.
 
-![Arch Wiki in Kestrel](screenshots/02-archwiki.png)
+![Arch Wiki with find-in-page](screenshots/04-find.png)
 
-| Link hints (`f`) | Tab picker (`b`) |
+| Address bar suggestions | Command palette (`Ctrl+K`) |
 |---|---|
-| ![hints](screenshots/03-link-hints.png) | ![buffers](screenshots/04-tab-picker.png) |
-| **Find in page (`/`)** | **Live theme switch + history completion (`o`)** |
-| ![find](screenshots/05-find.png) | ![gruvbox](screenshots/07-gruvbox-completion.png) |
+| ![suggestions](screenshots/01-start.png) | ![palette](screenshots/03-command-palette.png) |
+| **Link hints (`Alt+F`)** | **Menu** |
+| ![hints](screenshots/05-link-hints.png) | ![menu](screenshots/06-menu.png) |
 
 ## Features
 
-- **Modal Vim keys.** NORMAL mode for commands, INSERT for typing into the page, HINT for following links, COMMAND for the `:` line, and PASSTHROUGH to send every key to the page.
-- **Link hints.** `f` follows a link, `F` opens it in a background tab, `yf` copies its URL.
-- **Follows the Omarchy theme.** Colors come from `~/.config/omarchy/current/theme` (`colors.toml` or `alacritty.toml`). When you change theme with `omarchy-theme-set` or the menu, Kestrel updates within about 2 seconds. Sites that support dark mode pick up your theme's dark or light setting.
-- **Command line with completion.** `o`, `O` and `t` complete from your bookmarks and history. Search shortcuts work there too: `yt lofi`, `aw pacman`, `gh hyprland`, `w kestrel`.
-- **Tabs.** `J`/`K` switch tabs, `Alt+1…9` jumps to a tab, `x` closes one, `X` reopens it, and `b` opens a fuzzy tab picker.
-- **Session restore.** Kestrel reopens your tabs on start. Background tabs only load when you open them.
-- **Persistent profile.** Logins, cookies and history are kept between runs. Run `--private` for a throwaway window.
+- **Works like a normal browser.** Typing goes to the page. Keyboard shortcuts are `Ctrl`/`Alt` chords and F-keys, so they never get in the way of typing, and they work even while a text field is focused.
+- **Address bar that does more.** It suggests from your bookmarks, history and open tabs. A few prefixes change what it searches:
+  - `yt lofi`, `aw pacman`, `gh hyprland`: search YouTube, the Arch Wiki or GitHub
+  - `>`: run a command
+  - `%`: jump to an open tab
+  - `*`: search bookmarks
+  - `^`: search history
+- **Command palette (`Ctrl+K`).** Lists every action with its shortcut, so you can look things up as you go.
+- **Link hints (`Alt+F`).** Labels every link on the page; type a label to click it. `Alt+Shift+F` opens the link in a background tab instead.
+- **Follows the Omarchy theme.** Colors are read from `~/.config/omarchy/current/theme` and update within about 2 seconds of a theme change. Sites that support dark mode switch to match.
+- **Tabs and windows.**
+  - Session restore. Background tabs only load when you open them.
+  - Reopen closed tabs.
+  - Middle-click a tab to close it.
+  - Multiple windows.
+  - Private windows.
+- **Built in:** find bar, bookmarks, downloads to `~/Downloads` with a notification, site permission prompts, fullscreen video, devtools.
 - **Single instance.** Running `kestrel URL` while Kestrel is open adds a tab to the open window, so it works as your default browser.
-- **Built in:** downloads to `~/Downloads` with a `notify-send` toast, site permission prompts (`y`/`n`), fullscreen video, and devtools (`F12`).
-- **Wayland native.** The app id is `kestrel`, so you can write Hyprland window rules for it.
+- **Optional Vim mode.** Set `keymap = "vim"` to add modal keys on top of the normal shortcuts: `j`/`k` scrolling, `f` hints, `o` to open, `:` for the palette.
 
 ## Install (Omarchy / Arch)
 
@@ -33,54 +42,50 @@ git clone https://github.com/DaCoder1/Browser.git kestrel && cd kestrel
 
 Or build a real package with `makepkg -si` (uses the included `PKGBUILD`).
 
-To open it with its own key, add a line like this to `~/.config/hypr/bindings.conf` (use any free key):
+## Shortcuts
 
-```
-bindd = SUPER SHIFT, K, Kestrel, exec, uwsm app -- kestrel
-```
+Press `F1` in the browser for the full list, or `Ctrl+K` and type what you want.
 
-## Keys
-
-Press `?` in the browser for the full list. Most keys take a count, e.g. `5j` or `3x`.
-
-| Keys | Action |
+| Tabs & windows | |
 |---|---|
-| `j` `k` `h` `l` | scroll |
-| `d` `u` / `Space` `Shift+Space` | half page / full page |
-| `gg` `G` | top / bottom (`50G` = 50%) |
-| `H` `L` | back / forward |
-| `r` `R` | reload / hard reload |
-| `o` `O` `t` | open URL or search (here / new tab) |
-| `go` `gO` | edit current URL |
-| `p` `P` | open clipboard (here / new tab) |
-| `f` `F` `yf` | hint: follow / background tab / copy URL |
-| `J` `K`, `gt` `gT` | next / previous tab |
-| `Alt+1…9`, `g0` `g$` | jump to tab, first / last tab |
-| `x` `X` `yd` | close / reopen / duplicate tab |
-| `Alt+,` `Alt+.` | move tab left / right |
-| `b` | pick a tab by name |
-| `/` `n` `N` | find, next, previous |
-| `i` `gi` | insert mode / focus first input |
-| `Esc` | back to normal mode; clears hints and search |
-| `Ctrl+v` | passthrough mode (`Shift+Esc` leaves) |
-| `yy` `yt` | copy URL / title |
-| `zi` `zo` `zz` (`+` `-` `=`) | zoom in / out / reset |
-| `B` | toggle bookmark |
-| `gu` `gU` | up one URL level / site root |
-| `:` | command line (`:help`, `:private`, `:tab-only`, `:quit`…) |
-| `F12` | devtools |
-| `ZZ` `ZQ` | quit (with / without saving the session) |
+| New tab / close tab | `Ctrl+T` / `Ctrl+W` |
+| Reopen closed tab | `Ctrl+Shift+T` |
+| Next / previous tab | `Ctrl+Tab` / `Ctrl+Shift+Tab` (or `Ctrl+PgDn` / `PgUp`) |
+| Jump to tab 1–8 / last tab | `Ctrl+1…8` / `Ctrl+9` (also `Alt+1…9`) |
+| Search open tabs | `Ctrl+Shift+A` |
+| Move tab left / right | `Ctrl+Shift+PgUp` / `PgDn` |
+| New window / private window | `Ctrl+N` / `Ctrl+Shift+N` |
+| Close window / quit | `Ctrl+Shift+W` / `Ctrl+Q` |
 
-Clicking into a text field switches to INSERT mode, and clicking elsewhere switches back. A site that focuses its own search box won't take your keys.
+| Navigation & address bar | |
+|---|---|
+| Back / forward | `Alt+←` / `Alt+→` |
+| Reload / hard reload | `Ctrl+R` or `F5` / `Ctrl+Shift+R` |
+| Focus address bar | `Ctrl+L`, `Alt+D`, `F6` |
+| Command palette | `Ctrl+K` |
+| Bookmarks / history | `Ctrl+Shift+O` / `Ctrl+H` |
+| Open in a new tab from the address bar | `Alt+Enter` |
+
+| Page | |
+|---|---|
+| Find / next / previous | `Ctrl+F` / `F3` or `Ctrl+G` / `Shift+F3` |
+| Bookmark page | `Ctrl+D` |
+| Follow link / in background tab / copy link | `Alt+F` / `Alt+Shift+F` / `Alt+Y` |
+| Focus first text field | `Alt+I` |
+| Copy page URL | `Alt+C` |
+| Zoom in / out / reset | `Ctrl+=` / `Ctrl+-` / `Ctrl+0` |
+| Fullscreen | `F11` |
+| View source / devtools | `Ctrl+U` / `F12` |
+| Downloads folder | `Ctrl+Shift+Y` |
 
 ## Configuration
 
-Copy `config.example.toml` to `~/.config/kestrel/config.toml`. In that file you can:
+Open the settings from the menu (**Settings…**) or edit `~/.config/kestrel/config.toml` (see `config.example.toml`). In that file you can:
 
+- switch to the Vim keymap
 - change the search engine
 - add search shortcuts
-- change hint letters, scroll step, zoom and font
-- remap any key (`"<C-t>" = "set-cmd open -t "`, or `"x" = "nop"` to unbind it)
+- remap any shortcut (`"<C-e>" = "tab-search"`), or unbind one with `"nop"`
 
 Data lives in `~/.local/share/kestrel/` (history and bookmarks in SQLite, plus `session.json`).
 
@@ -92,4 +97,13 @@ python -m kestrel          # run from the repo
 python -m pytest tests     # unit tests
 ```
 
-Layout: `kestrel/app.py` (window, modes, commands), `kestrel/js/kestrel.js` (hints, scrolling and focus detection, injected into an isolated JS world), `kestrel/theme.py`, `kestrel/config.py`, `kestrel/storage.py`, `kestrel/pages.py`.
+Code layout:
+
+| File | What it holds |
+|---|---|
+| `kestrel/app.py` | app controller: windows, sessions, theme, single instance |
+| `kestrel/window.py` | browser window, shortcuts, commands |
+| `kestrel/widgets.py` | address bar, suggestions, find bar |
+| `kestrel/commands.py` | list of every command |
+| `kestrel/config.py` | default key bindings and settings |
+| `kestrel/js/kestrel.js` | link hints and scrolling, injected into an isolated JS world |

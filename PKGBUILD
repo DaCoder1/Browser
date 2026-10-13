@@ -1,8 +1,8 @@
 # Build from a clone of this repo:  makepkg -si
 pkgname=kestrel-browser
-pkgver=0.1.0
+pkgver=0.2.0
 pkgrel=1
-pkgdesc="Keyboard-driven web browser for Omarchy (Qt WebEngine)"
+pkgdesc="Keyboard-friendly web browser for Omarchy (Qt WebEngine)"
 arch=('any')
 url="https://github.com/DaCoder1/Browser"
 license=('MIT')
